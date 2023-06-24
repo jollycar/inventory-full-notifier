@@ -1,4 +1,4 @@
-# Inventory Full Notififier
+# Inventory Full Notifier
 
 ## About
 
