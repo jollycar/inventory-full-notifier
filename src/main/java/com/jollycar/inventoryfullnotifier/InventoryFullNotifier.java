@@ -25,7 +25,6 @@ public class InventoryFullNotifier implements ModInitializer {
 
 		AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
 			if (world.isClient && !player.isSpectator()) {
-				// Find any slot that has no items
 				boolean hasOnlyFilledSlots = player.getInventory().main.stream()
 						.noneMatch(itemStack -> itemStack.getCount() == 0);
 
@@ -33,12 +32,14 @@ public class InventoryFullNotifier implements ModInitializer {
 				if (hasOnlyFilledSlots) {
 					// Get all items in slots that still have space
 					Set<Item> itemsInFilledSlotsWithSpace = player.getInventory().main.stream()
+							.filter(itemStack -> itemStack.getMaxCount() > 1) // skip pickaxe etc.
 							.filter(itemStack -> itemStack.getCount() < itemStack.getMaxCount())
 							.map(ItemStack::getItem)
 							.collect(Collectors.toSet());
 
 					// Count the slots where ItemStack count is max and there is no slot with the same item and still has space
 					long count = player.getInventory().main.stream()
+							.filter(itemStack -> itemStack.getMaxCount() > 1) // skip pickaxe etc.
 							.filter(itemStack -> itemStack.getCount() == itemStack.getMaxCount())
 							.filter(not(itemStack -> itemsInFilledSlotsWithSpace.contains(itemStack.getItem())))
 							.count();
