@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "inventoryfullnotifier",
+	"version": "${version}",
+	"name": "Inventory Full Notifier",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/inventoryfullnotifier/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.jollycar.inventoryfullnotifier.InventoryFullNotifier"
+		],
+		"client": [
+			"com.jollycar.inventoryfullnotifier.InventoryFullNotifierClient"
+		]
+	},
+	"mixins": [
+		"inventoryfullnotifier.mixins.json",
+		{
+			"config": "inventoryfullnotifier.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.14.21",
+		"minecraft": "~1.19.4",
+		"java": ">=17",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
