@@ -9,26 +9,16 @@
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/jollycar/inventory-full-notifier"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/inventoryfullnotifier/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": [
-			"com.jollycar.inventoryfullnotifier.InventoryFullNotifier"
-		],
 		"client": [
-			"com.jollycar.inventoryfullnotifier.InventoryFullNotifierClient"
+			"com.jollycar.inventoryfullnotifier.InventoryFullNotifier"
 		]
 	},
-	"mixins": [
-		"inventoryfullnotifier.mixins.json",
-		{
-			"config": "inventoryfullnotifier.client.mixins.json",
-			"environment": "client"
-		}
-	],
 	"depends": {
 		"fabricloader": ">=0.14.21",
 		"minecraft": "~1.19.4",
