@@ -1,7 +1,11 @@
 package com.jollycar.inventoryfullnotifier;
 
+import com.jollycar.inventoryfullnotifier.config.ModConfiguration;
+import dev.toma.configuration.Configuration;
+import dev.toma.configuration.config.format.ConfigFormats;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
@@ -18,10 +22,15 @@ import java.util.stream.Collectors;
 
 public class InventoryFullNotifier implements ClientModInitializer {
 
-	public static final Logger LOGGER = LoggerFactory.getLogger("inventoryfullnotifier");
+	public static final String MOD_ID = "inventoryfullnotifier";
+	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+	private static ModConfiguration config;
 
 	@Override
 	public void onInitializeClient() {
+		config = Configuration.registerConfig(ModConfiguration.class, ConfigFormats.json()).getConfigInstance();
+
 		AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
 			if (world.isClient && !player.isSpectator()) {
 
@@ -39,10 +48,13 @@ public class InventoryFullNotifier implements ClientModInitializer {
 				Set<Item> voidedInventoryItems = getVoidedInventoryItems(inventory, skipUnstackableItems);
 				LOGGER.warn("voided = {}", voidedInventoryItems);
 
-				// TODO: percentage configurable
-				if (!voidedInventoryItems.isEmpty() || roundedPercentage > 88){
-					player.playSound(SoundEvents.ENCHANT_THORNS_HIT, 1.0F, 1.0F);
+				if (config.modEnabled) {
+					// TODO: percentage configurable
+					if (!voidedInventoryItems.isEmpty() || roundedPercentage > 88){
+						player.playSound(SoundEvents.ENCHANT_THORNS_HIT, 1.0F, 1.0F);
+					}
 				}
+
 			}
 
 			return ActionResult.PASS;

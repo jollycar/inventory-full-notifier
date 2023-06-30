@@ -3,13 +3,14 @@
 	"id": "inventoryfullnotifier",
 	"version": "${version}",
 	"name": "Inventory Full Notifier",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "Make a sound when your inventory is (almost) full",
 	"authors": [
-		"Me!"
+		"Jollycar"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/jollycar/inventory-full-notifier"
+		"sources": "https://github.com/jollycar/inventory-full-notifier",
+		"issues": "https://github.com/jollycar/inventory-full-notifier/issues"
 	},
 	"license": "MIT",
 	"icon": "assets/inventoryfullnotifier/icon.png",
