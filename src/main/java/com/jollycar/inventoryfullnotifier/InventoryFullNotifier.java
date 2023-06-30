@@ -14,7 +14,7 @@ import net.minecraft.util.collection.DefaultedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.LinkedHashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collector;
@@ -97,27 +97,26 @@ public class InventoryFullNotifier implements ClientModInitializer {
 	 * @return A list of items, currently in the inventory, that have no more available slots in your inventory if a new item would be picked up.
 	 */
 	private static Set<Item> getVoidedInventoryItems(DefaultedList<ItemStack> inventory, boolean notifySingleStackableItems) {
+		if (inventory.stream().anyMatch(itemStack -> itemStack.getCount() == 0)) {
+			return Collections.emptySet();
+		}
 
 		List<ItemStack> nonEmptyItemSlots = inventory.stream()
-				.filter(itemStack -> itemStack.getCount() > 0) // not empty
-				.filter(itemStack -> notifySingleStackableItems || itemStack.getMaxCount() > 1)
+				.filter(itemStack -> itemStack.getCount() > 0 && (notifySingleStackableItems || itemStack.getMaxCount() > 1))
 				.toList();
 
 		Set<Item> itemsInFilledSlotsWithSpace = nonEmptyItemSlots.stream()
-				.filter(itemStack -> itemStack.getCount() < itemStack.getMaxCount()) // has room
+				.filter(itemStack -> itemStack.getCount() < itemStack.getMaxCount())
 				.map(ItemStack::getItem)
 				.collect(Collectors.toSet());
 
 		return nonEmptyItemSlots.stream()
-				.filter(itemStack -> itemStack.getCount() == itemStack.getMaxCount()) // is full
+				.filter(itemStack -> itemStack.getCount() == itemStack.getMaxCount())
 				.map(ItemStack::getItem)
 				.collect(collectSlotsWithNoRoom(itemsInFilledSlotsWithSpace));
 	}
 
 	private static Collector<Item, ?, Set<Item>> collectSlotsWithNoRoom(Set<Item> itemsInFilledSlotsWithSpace) {
-		return Collectors.collectingAndThen(
-				Collectors.filtering(item -> !itemsInFilledSlotsWithSpace.contains(item), Collectors.toSet()),
-				LinkedHashSet::new
-		);
+		return Collectors.filtering(item -> !itemsInFilledSlotsWithSpace.contains(item), Collectors.toSet());
 	}
 }

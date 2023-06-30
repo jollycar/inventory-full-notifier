@@ -8,13 +8,13 @@ import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
 @Config(name = InventoryFullNotifier.MOD_ID)
 public class ModConfiguration implements ConfigData {
-    @Comment("Mod enabled [default: true]")
+    @Comment("Mod enabled [default: yes]")
     public boolean modEnabled = true;
 
-    @Comment("Notify if there is no more room for single stack items, like a pickaxe [default: false]")
+    @Comment("Notify if there is no more room for single stack items, like a pickaxe [default: no]")
     public boolean notifySingleStackableItems = false;
 
-    @Comment("Notify if there is no more room for any item already in your inventory [default: true]")
+    @Comment("Notify if there is no more room for any item already in your inventory [default: yes]")
     public boolean notifyNoMoreRoom = true;
 
     @Comment("Notify if the inventory reaches a certain percentage of its maximum capacity [default: 100] (1 to 100)")

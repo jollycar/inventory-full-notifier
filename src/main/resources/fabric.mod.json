@@ -8,7 +8,7 @@
 		"Jollycar"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
+		"homepage": "https://legacy.curseforge.com/minecraft/mc-mods/inventory-full-notifier",
 		"sources": "https://github.com/jollycar/inventory-full-notifier",
 		"issues": "https://github.com/jollycar/inventory-full-notifier/issues"
 	},
@@ -24,7 +24,7 @@
 		]
 	},
 	"depends": {
-		"fabricloader": ">=0.14.21",
+		"fabricloader": ">=0.14.18",
 		"minecraft": "~1.19.4",
 		"java": ">=17",
 		"fabric-api": "*",
