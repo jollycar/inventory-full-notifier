@@ -25,13 +25,13 @@ public class InventoryFullNotifier implements ClientModInitializer {
 	public static final String MOD_ID = "invfullnot";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	public static ModConfiguration config;
+	private static ModConfiguration config;
 
 	@Override
 	public void onInitializeClient() {
 
 		ConfigHolder<ModConfiguration> holder = AutoConfig.register(ModConfiguration.class, Toml4jConfigSerializer::new);
-		config = holder.getConfig();
+		setConfig(holder.getConfig());
 
 		AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
 			if (config.modEnabled && (world.isClient && !player.isSpectator())) {
@@ -54,6 +54,10 @@ public class InventoryFullNotifier implements ClientModInitializer {
 			return ActionResult.PASS;
 		});
 
+	}
+
+	public static void setConfig(ModConfiguration config) {
+		InventoryFullNotifier.config = config;
 	}
 
 	/**
