@@ -42,11 +42,10 @@ public class InventoryFullNotifier implements ClientModInitializer {
 				int[] inventorySize = getInventorySize(inventory);
 				int currentSize = inventorySize[0];
 				int maxSize = inventorySize[1];
+				int percentageFull = (int) Math.round((double) currentSize / maxSize * 100);
 
-				double percentage = (double) currentSize / maxSize * 100;
-				int roundedPercentage = (int) Math.round(percentage);
-
-				if ((config.notifyNoMoreRoom && !voidedInventoryItems.isEmpty()) || roundedPercentage > config.fullPercentage) {
+				if ((config.notifyNoMoreRoom && !voidedInventoryItems.isEmpty()) || percentageFull > config.fullPercentage) {
+					LOGGER.trace("Inventory is {} percent full", percentageFull);
 					player.playSound(SoundEvents.ENCHANT_THORNS_HIT, (float) config.volumePercentage / 100, 1.0F);
 				}
 			}
