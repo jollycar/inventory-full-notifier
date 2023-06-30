@@ -23,17 +23,9 @@ repositories {
 			includeGroup "com.terraformersmc"
 		}
 	}
-}
-
-loom {
-    splitEnvironmentSourceSets()
-
-	mods {
-		"inventoryfullnotifier" {
-			sourceSet sourceSets.main
-		}
+	maven {
+		url "https://maven.shedaniel.me/"
 	}
-
 }
 
 dependencies {
@@ -45,8 +37,10 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	// Configuration mod - https://www.curseforge.com/minecraft/mc-mods/configuration
-	modImplementation "curse.maven:configuration-444699:4537591"
+	// Cloth Config - https://maven.shedaniel.me/me/shedaniel/cloth/cloth-config-fabric/
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
 
 	//Mod Menu - https://github.com/TerraformersMC/ModMenu/wiki/API
 	modImplementation "com.terraformersmc:modmenu:${mod_menu_version}"

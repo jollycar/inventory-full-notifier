@@ -14,17 +14,22 @@
 	},
 	"license": "MIT",
 	"icon": "assets/invfullnot/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
 		"client": [
 			"com.jollycar.inventoryfullnotifier.InventoryFullNotifier"
+		],
+		"modmenu": [
+			"com.jollycar.inventoryfullnotifier.config.ModMenuIntegration"
 		]
 	},
 	"depends": {
 		"fabricloader": ">=0.14.21",
 		"minecraft": "~1.19.4",
 		"java": ">=17",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"fabric": "*",
+		"cloth-config2": ">=5.0.0"
 	},
 	"suggests": {
 		"another-mod": "*"

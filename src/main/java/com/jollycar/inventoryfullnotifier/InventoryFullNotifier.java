@@ -1,11 +1,11 @@
 package com.jollycar.inventoryfullnotifier;
 
 import com.jollycar.inventoryfullnotifier.config.ModConfiguration;
-import dev.toma.configuration.Configuration;
-import dev.toma.configuration.config.format.ConfigFormats;
+import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigHolder;
+import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
@@ -25,16 +25,19 @@ public class InventoryFullNotifier implements ClientModInitializer {
 	public static final String MOD_ID = "invfullnot";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-	private static ModConfiguration config;
+	public static ModConfiguration config;
 
 	@Override
 	public void onInitializeClient() {
-		config = Configuration.registerConfig(ModConfiguration.class, ConfigFormats.json()).getConfigInstance();
+
+		ConfigHolder<ModConfiguration> holder = AutoConfig.register(ModConfiguration.class, Toml4jConfigSerializer::new);
+		config = holder.getConfig();
 
 		AttackBlockCallback.EVENT.register((player, world, hand, pos, direction) -> {
-			if (world.isClient && !player.isSpectator()) {
-
+			if (config.modEnabled && (world.isClient && !player.isSpectator())) {
 				DefaultedList<ItemStack> inventory = player.getInventory().main;
+
+				Set<Item> voidedInventoryItems = getVoidedInventoryItems(inventory, config.notifySingleStackableItems);
 
 				int[] inventorySize = getInventorySize(inventory);
 				int currentSize = inventorySize[0];
@@ -43,22 +46,14 @@ public class InventoryFullNotifier implements ClientModInitializer {
 				double percentage = (double) currentSize / maxSize * 100;
 				int roundedPercentage = (int) Math.round(percentage);
 
-				LOGGER.warn("percentage full = {}", percentage);
-				boolean skipUnstackableItems = true;
-				Set<Item> voidedInventoryItems = getVoidedInventoryItems(inventory, skipUnstackableItems);
-				LOGGER.warn("voided = {}", voidedInventoryItems);
-
-				if (config.modEnabled) {
-					// TODO: percentage configurable
-					if (!voidedInventoryItems.isEmpty() || roundedPercentage > 88){
-						player.playSound(SoundEvents.ENCHANT_THORNS_HIT, 1.0F, 1.0F);
-					}
+				if ((config.notifyNoMoreRoom && !voidedInventoryItems.isEmpty()) || roundedPercentage > config.fullPercentage) {
+					player.playSound(SoundEvents.ENCHANT_THORNS_HIT, (float) config.volumePercentage / 100, 1.0F);
 				}
-
 			}
 
 			return ActionResult.PASS;
 		});
+
 	}
 
 	/**
@@ -94,15 +89,15 @@ public class InventoryFullNotifier implements ClientModInitializer {
 	 * In other words: there is no inventory slot available to store any more items already in the inventory.
 	 *
 	 * @param inventory The player's current inventory as a {@link DefaultedList}
-	 * @param skipUnstackableItems true if unstackable items must be skipped, like pickaxe, sword etc.
+	 * @param notifySingleStackableItems true if player is also notified for single stack items already in the inventory
 	 *
 	 * @return A list of items, currently in the inventory, that have no more available slots in your inventory if a new item would be picked up.
 	 */
-	private static Set<Item> getVoidedInventoryItems(DefaultedList<ItemStack> inventory, boolean skipUnstackableItems) {
+	private static Set<Item> getVoidedInventoryItems(DefaultedList<ItemStack> inventory, boolean notifySingleStackableItems) {
 
 		List<ItemStack> nonEmptyItemSlots = inventory.stream()
 				.filter(itemStack -> itemStack.getCount() > 0) // not empty
-				.filter(itemStack -> !skipUnstackableItems || itemStack.getMaxCount() > 1)
+				.filter(itemStack -> notifySingleStackableItems || itemStack.getMaxCount() > 1)
 				.toList();
 
 		Set<Item> itemsInFilledSlotsWithSpace = nonEmptyItemSlots.stream()
