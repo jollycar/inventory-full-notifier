@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 public class InventoryFullNotifier implements ClientModInitializer {
 
-	public static final String MOD_ID = "inventoryfullnotifier";
+	public static final String MOD_ID = "invfullnot";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	private static ModConfiguration config;
