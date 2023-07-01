@@ -6,6 +6,8 @@ This mod notifies a player when their inventory is x percentage full or if there
 
 I had the need for this kind of mod when I was playing on a "prison" server and could not find a similar mod on curseforge.
 
+**This is a Fabric mod**
+
 ### Features
 
 - This is a client side mod
