@@ -2,9 +2,10 @@
   "text.autoconfig.invfullnot.title": "Inventory Full Notifier Config",
 
   "text.autoconfig.invfullnot.option.modEnabled": "Mod enabled",
-  "text.autoconfig.invfullnot.option.notifySingleStackableItems": "Notify for single stack items,",
+  "text.autoconfig.invfullnot.option.notifySingleStackableItems": "Notify for single stack items",
   "text.autoconfig.invfullnot.option.notifyNoMoreRoom": "Notify if no more room",
   "text.autoconfig.invfullnot.option.fullPercentage": "Notify on inventory percentage full",
+  "text.autoconfig.invfullnot.option.soundEvent": "Sound event when inventory full",
   "text.autoconfig.invfullnot.option.volumePercentage": "Notifier sound volume"
 
 }
