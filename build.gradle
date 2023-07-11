@@ -1,5 +1,6 @@
 plugins {
-	id 'fabric-loom' version '1.2-SNAPSHOT'
+	// see settings.gradle for fabric-loom version
+	id 'fabric-loom'
 	id 'maven-publish'
 }
 
@@ -7,7 +8,7 @@ version = project.mod_version
 group = project.maven_group
 
 base {
-	archivesName  = "${project.archives_base_name}-fabric-${minecraft_version}"
+	archivesName  = "${project.archives_base_name}-fabric-${fabric_minecraft_version}"
 }
 
 repositories {
@@ -30,27 +31,30 @@ repositories {
 
 dependencies {
 	// To change the versions see the gradle.properties file
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	minecraft "com.mojang:minecraft:${project.fabric_minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.fabric_yarn_version}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	// Cloth Config - https://maven.shedaniel.me/me/shedaniel/cloth/cloth-config-fabric/
-	modApi("me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}") {
+	modApi("me.shedaniel.cloth:cloth-config-fabric:${dependency_cloth_config_version}") {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 
 	//Mod Menu - https://github.com/TerraformersMC/ModMenu/wiki/API
-	modImplementation "com.terraformersmc:modmenu:${mod_menu_version}"
+	modImplementation "com.terraformersmc:modmenu:${dependency_mod_menu_version}"
 }
 
 processResources {
-	inputs.property "version", project.version
-
 	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+		expand([
+				"version": project.version,
+				"depends_fabric_loader": "${fabric_loader_version}",
+				"depends_minecraft": "${fabric_minecraft_version}",
+				"depends_cloth_config": "${dependency_cloth_config_version}"
+		])
 	}
 }
 

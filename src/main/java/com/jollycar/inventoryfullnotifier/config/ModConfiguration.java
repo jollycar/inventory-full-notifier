@@ -21,6 +21,9 @@ public class ModConfiguration implements ConfigData {
     @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
     public int fullPercentage = 100;
 
+    @Comment("Set the notify (in-game) sound event [default: enchant.thorns.hit]")
+    public String soundEvent = "enchant.thorns.hit";
+
     @Comment("Set the volume of the notifier sound [default: 75] (1 to 100)")
     @ConfigEntry.BoundedDiscrete(min = 0, max = 100)
     public int volumePercentage = 75;
