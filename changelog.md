@@ -1,3 +1,8 @@
+## v1.1.1
+
+- Make sound configurable (see SoundEvents). Default sound: enchant.thorns.hit
+- Update dependencies (loom, cloth-config and modmenu)
+
 ## v1.1.0
 
 Recreated project using the [fabric template mod generator](https://fabricmc.net/develop/template/)
