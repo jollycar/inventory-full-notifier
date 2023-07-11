@@ -23,13 +23,13 @@
 			"com.jollycar.inventoryfullnotifier.config.ModMenuIntegration"
 		]
 	},
+	"mixins": [],
 	"depends": {
-		"fabricloader": ">=0.14.18",
-		"minecraft": "~1.19.4",
+		"fabricloader": ">=${depends_fabric_loader}",
+		"minecraft": "~${depends_minecraft}",
 		"java": ">=17",
-		"fabric-api": "*",
 		"fabric": "*",
-		"cloth-config2": ">=5.0.0"
+		"cloth-config2": ">=${depends_cloth_config}"
 	},
 	"suggests": {
 		"another-mod": "*"

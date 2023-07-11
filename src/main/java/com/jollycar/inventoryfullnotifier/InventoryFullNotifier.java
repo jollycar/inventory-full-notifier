@@ -8,14 +8,16 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.minecraft.util.registry.Registry;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -23,7 +25,6 @@ import java.util.stream.Collectors;
 public class InventoryFullNotifier implements ClientModInitializer {
 
 	public static final String MOD_ID = "invfullnot";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	private static ModConfiguration config;
 
@@ -45,14 +46,18 @@ public class InventoryFullNotifier implements ClientModInitializer {
 				int percentageFull = (int) Math.round((double) currentSize / maxSize * 100);
 
 				if ((config.notifyNoMoreRoom && !voidedInventoryItems.isEmpty()) || percentageFull > config.fullPercentage) {
-					LOGGER.trace("Inventory is {} percent full", percentageFull);
-					player.playSound(SoundEvents.ENCHANT_THORNS_HIT, (float) config.volumePercentage / 100, 1.0F);
+					player.playSound(getConfiguredSoundEvent().orElse(SoundEvents.ENCHANT_THORNS_HIT), (float) config.volumePercentage / 100, 1.0F);
 				}
 			}
 
 			return ActionResult.PASS;
 		});
 
+	}
+
+	public Optional<SoundEvent> getConfiguredSoundEvent() {
+		return Optional.ofNullable(Identifier.tryParse(config.soundEvent))
+				.map(Registry.SOUND_EVENT::get);
 	}
 
 	public static void setConfig(ModConfiguration config) {
